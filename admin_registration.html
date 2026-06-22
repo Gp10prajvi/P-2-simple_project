@@ -1,1 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prajvi Edify - Admin Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    --navy: #082d52;
+    --green: #5b8f2a;
+    --green-dark: #49741f;
+    --green-soft: #eef7e6;
+    --blue-soft: #f3f9fc;
+    --ink: #16324c;
+    --muted: #5f7281;
+    --line: #dce8e5;
+    --field: #f3f8f5;
+    --panel: #ffffff;
+    --shadow: 0 22px 48px rgba(8, 45, 82, .14);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "DM Sans", Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 90% 12%, rgba(91, 143, 42, .14), transparent 24%),
+      linear-gradient(180deg, #f8fcfb 0%, #eef8f2 100%);
+    letter-spacing: 0;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    letter-spacing: 0;
+  }
+
+  button { cursor: pointer; }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .topbar {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+
+  .brand img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid rgba(8, 45, 82, .12);
+    background: #fff;
+  }
+
+  .brand span {
+    display: grid;
+    line-height: 1;
+    font-size: 20px;
+  }
+
+  .brand em {
+    color: var(--green);
+    font-style: normal;
+  }
+
+  .back-link {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid rgba(8, 45, 82, .15);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--navy);
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 48px 24px 72px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 38px;
+  }
+
+  .page-title h1 {
+    margin: 0;
+    color: var(--navy);
+    font-size: clamp(38px, 6vw, 72px);
+    line-height: 1.02;
+    font-weight: 800;
+  }
+
+  .page-title p {
+    margin: 18px auto 0;
+    max-width: 800px;
+    color: var(--muted);
+    font-size: clamp(18px, 2.3vw, 28px);
+    line-height: 1.35;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(380px, .92fr) minmax(420px, 1.08fr);
+    gap: 44px;
+    align-items: start;
+  }
+
+  .form-card {
+    background: var(--panel);
+    border: 1px solid rgba(8, 45, 82, .08);
+    border-radius: 14px;
+    padding: 32px 34px;
+    box-shadow: var(--shadow);
+  }
+
+  .form-card h2 {
+    margin: 0 0 24px;
+    color: var(--green-dark);
+    font-size: clamp(24px, 2.6vw, 34px);
+    line-height: 1.2;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .field {
+    display: grid;
+    gap: 7px;
+  }
+
+  .field.full { grid-column: 1 / -1; }
+
+  label {
+    color: #132a3f;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 58px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--field);
+    color: var(--ink);
+    outline: none;
+    padding: 0 18px;
+    font-size: 18px;
+  }
+
+  textarea {
+    min-height: 94px;
+    padding: 14px 18px;
+    resize: vertical;
+  }
+
+  .password-wrap {
+    position: relative;
+  }
+
+  .password-wrap input {
+    padding-right: 54px;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: 0;
+    background: transparent;
+    color: #6d7e89;
+    display: grid;
+    place-items: center;
+    padding: 0;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    background: #fff;
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px rgba(91, 143, 42, .16);
+  }
+
+  select:disabled {
+    color: #a5b0ac;
+    background: #eef4f1;
+    cursor: not-allowed;
+  }
+
+  .check-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+    color: #111;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  .check-row input {
+    width: 21px;
+    height: 21px;
+    min-height: 21px;
+    padding: 0;
+    accent-color: var(--green);
+    flex: 0 0 auto;
+  }
+
+  .manual-block {
+    display: none;
+    gap: 14px;
+    margin-top: 8px;
+    padding: 15px;
+    border: 1px solid #cfe5c0;
+    border-radius: 8px;
+    background: var(--green-soft);
+  }
+
+  .manual-block.show { display: grid; }
+
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .captcha-box {
+    min-height: 78px;
+    flex: 1;
+    border: 1px solid #d1d8d5;
+    border-radius: 5px;
+    background: #fbfbfb;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 20px;
+    color: #222;
+    font-size: 17px;
+  }
+
+  .captcha-check {
+    width: 34px;
+    height: 34px;
+    border: 3px solid #666;
+    border-radius: 3px;
+    background: #fff;
+    flex: 0 0 auto;
+  }
+
+  .submit-btn {
+    min-height: 62px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--green);
+    color: #fff;
+    padding: 0 30px;
+    font-size: 18px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .submit-btn:hover {
+    background: var(--green-dark);
+  }
+
+  .benefits h2 {
+    margin: 0 0 36px;
+    color: var(--navy);
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.18;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .benefit-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 42px;
+  }
+
+  .benefit {
+    display: grid;
+    grid-template-columns: 76px 1fr;
+    gap: 18px;
+    align-items: center;
+    color: #304a58;
+    font-size: clamp(20px, 2.2vw, 28px);
+    line-height: 1.34;
+  }
+
+  .benefit strong {
+    color: var(--navy);
+    font-weight: 800;
+  }
+
+  .benefit-icon {
+    width: 76px;
+    height: 76px;
+    border: 6px solid var(--green);
+    border-radius: 50%;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    color: var(--navy);
+  }
+
+  .result {
+    display: none;
+    margin-top: 18px;
+    padding: 14px 16px;
+    border: 1px solid #b9dec4;
+    border-radius: 8px;
+    background: #f4fbf5;
+    color: #286246;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.45;
+  }
+
+  .result.show { display: block; }
+
+  svg[data-lucide] {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2.1;
+  }
+
+  @media (max-width: 980px) {
+    .content-grid,
+    .benefit-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .topbar {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .page {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .form-card {
+      padding: 24px 18px;
+    }
+
+    .field-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .action-row {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .submit-btn,
+    .captcha-box {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="registration.html">
+    <img src="school_logo.png" alt="Prajvi Edify logo">
+    <span>PRAJVI <em>EDIFY</em></span>
+  </a>
+  <a class="back-link" href="registration.html">
+    <i data-lucide="arrow-left" aria-hidden="true"></i>
+    Registration options
+  </a>
+</header>
+
+<main class="page">
+  <section class="page-title">
+    <h1>Get Your FREE Administrator Account</h1>
+    <p>Select your district, city, and school to start Prajvi Edify setup for your institute.</p>
+  </section>
+
+  <section class="content-grid">
+    <form class="form-card" id="admin-form" novalidate>
+      <h2>Free School Setup - No Credit Card Required</h2>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="admin-name">Name</label>
+          <input id="admin-name" name="admin-name" type="text" autocomplete="name" placeholder="Enter your name">
+        </div>
+
+        <div class="field">
+          <label for="admin-email">Email ID</label>
+          <input id="admin-email" name="admin-email" type="email" autocomplete="email" placeholder="Enter your email">
+        </div>
+
+        <div class="field">
+          <label for="admin-password">Password</label>
+          <div class="password-wrap">
+            <input id="admin-password" name="admin-password" type="password" autocomplete="new-password" placeholder="Enter password">
+            <button class="toggle-password" type="button" data-toggle-password="admin-password" aria-label="Show password">
+              <i data-lucide="eye-off" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="confirm-password">Confirm Password</label>
+          <div class="password-wrap">
+            <input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" placeholder="Confirm password">
+            <button class="toggle-password" type="button" data-toggle-password="confirm-password" aria-label="Show confirm password">
+              <i data-lucide="eye-off" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="district">District</label>
+          <select id="district" name="district">
+            <option value="">Select district</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="city">City</label>
+          <select id="city" name="city" disabled>
+            <option value="">Select city</option>
+          </select>
+        </div>
+
+        <div class="field full">
+          <label for="school">School Option</label>
+          <select id="school" name="school" disabled>
+            <option value="">Select school</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="check-row" for="manual-school-toggle">
+        <input id="manual-school-toggle" type="checkbox">
+        Didn't find your school name?
+      </label>
+
+      <div class="manual-block" id="manual-block">
+        <div class="field-grid">
+          <div class="field">
+            <label for="manual-school">School name</label>
+            <input id="manual-school" name="manual-school" type="text" placeholder="Enter school name">
+          </div>
+          <div class="field">
+            <label for="manual-city">City</label>
+            <input id="manual-city" name="manual-city" type="text" placeholder="Enter city">
+          </div>
+          <div class="field full">
+            <label for="manual-address">School address</label>
+            <textarea id="manual-address" name="manual-address" placeholder="Building, area, district, state"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="captcha-box" aria-hidden="true">
+          <span class="captcha-check"></span>
+          <span>I'm not a robot</span>
+        </div>
+        <button class="submit-btn" type="submit">Create Admin Account</button>
+      </div>
+
+      <div class="result" id="admin-result" role="status" aria-live="polite"></div>
+    </form>
+
+    <aside class="benefits" aria-label="Why choose Prajvi Edify">
+      <h2>Why Choose Prajvi Edify for Your School?</h2>
+      <div class="benefit-grid">
+        <div class="benefit">
+          <span class="benefit-icon"><i data-lucide="clipboard-check" aria-hidden="true"></i></span>
+          <span>Curriculum-ready <strong>standards-aligned resources</strong> for daily classes</span>
+        </div>
+        <div class="benefit">
+          <span class="benefit-icon"><i data-lucide="book-open-check" aria-hidden="true"></i></span>
+          <span><strong>Personalized practice</strong> and learning support for each student</span>
+        </div>
+        <div class="benefit">
+          <span class="benefit-icon"><i data-lucide="file-pen-line" aria-hidden="true"></i></span>
+          <span>Quick worksheets, tests, and <strong>assessment creation</strong></span>
+        </div>
+        <div class="benefit">
+          <span class="benefit-icon"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i></span>
+          <span>Insightful <strong>performance reports</strong> for educators and administrators</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+  const schoolDirectory = {
+    "Bengaluru Urban": {
+      "Bengaluru": ["Prajvi Edify School", "National Public School Indiranagar", "Delhi Public School East", "Vidyashilp Academy"],
+      "Yelahanka": ["Ryan International School Yelahanka", "Vidyashilp School North", "Chrysalis High Yelahanka"],
+      "Kengeri": ["BGS Public School", "National Hill View Public School", "JSS Public School Kengeri"]
+    },
+    "Bengaluru Rural": {
+      "Devanahalli": ["Akash International School", "Delhi Public School Bangalore North", "Oxford English School"],
+      "Doddaballapura": ["Sri Devaraj Urs International Residential School", "Presidency Public School", "M.S.V. Public School"]
+    },
+    "Mysuru": {
+      "Mysuru": ["Excel Public School", "JSS Public School Mysuru", "Kautilya Vidyalaya"],
+      "Nanjangud": ["Rotary West School", "Citizen Convent School", "St. Joseph Central School"]
+    },
+    "Pune": {
+      "Pune": ["The Bishop's School", "Delhi Public School Pune", "Vibgyor High NIBM"],
+      "Pimpri-Chinchwad": ["City Pride School", "Podar International School Wakad", "Indira National School"]
+    },
+    "Hyderabad": {
+      "Hyderabad": ["Delhi Public School Hyderabad", "Meridian School", "Oakridge International School"],
+      "Secunderabad": ["St. Ann's High School", "Delhi Public School Nacharam", "Johnson Grammar School"]
+    }
+  };
+
+  const adminName = document.getElementById("admin-name");
+  const adminEmail = document.getElementById("admin-email");
+  const adminPassword = document.getElementById("admin-password");
+  const confirmPassword = document.getElementById("confirm-password");
+  const districtSelect = document.getElementById("district");
+  const citySelect = document.getElementById("city");
+  const schoolSelect = document.getElementById("school");
+  const manualToggle = document.getElementById("manual-school-toggle");
+  const manualBlock = document.getElementById("manual-block");
+  const manualSchool = document.getElementById("manual-school");
+  const manualCity = document.getElementById("manual-city");
+  const manualAddress = document.getElementById("manual-address");
+  const adminForm = document.getElementById("admin-form");
+  const adminResult = document.getElementById("admin-result");
+
+  function addOption(select, value, label) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label || value;
+    select.appendChild(option);
+  }
+
+  function resetSelect(select, placeholder) {
+    select.innerHTML = "";
+    addOption(select, "", placeholder);
+  }
+
+  function populateDistricts() {
+    resetSelect(districtSelect, "Select district");
+    Object.keys(schoolDirectory).forEach(district => addOption(districtSelect, district));
+  }
+
+  function populateCities() {
+    const district = districtSelect.value;
+    resetSelect(citySelect, "Select city");
+    resetSelect(schoolSelect, "Select school");
+    schoolSelect.disabled = true;
+
+    if (!district) {
+      citySelect.disabled = true;
+      return;
+    }
+
+    Object.keys(schoolDirectory[district]).forEach(city => addOption(citySelect, city));
+    citySelect.disabled = false;
+  }
+
+  function populateSchools() {
+    const district = districtSelect.value;
+    const city = citySelect.value;
+    resetSelect(schoolSelect, "Select school");
+
+    if (!district || !city) {
+      schoolSelect.disabled = true;
+      return;
+    }
+
+    (schoolDirectory[district][city] || []).forEach(school => addOption(schoolSelect, school));
+    addOption(schoolSelect, "__manual", "Not listed - add manually");
+    schoolSelect.disabled = false;
+  }
+
+  function setManualMode(enabled) {
+    manualToggle.checked = enabled;
+    manualBlock.classList.toggle("show", enabled);
+    manualSchool.required = enabled;
+    manualCity.required = enabled;
+    manualAddress.required = enabled;
+    schoolSelect.required = !enabled;
+
+    if (enabled) {
+      manualCity.value = citySelect.value || manualCity.value;
+      schoolSelect.value = "__manual";
+    } else if (schoolSelect.value === "__manual") {
+      schoolSelect.value = "";
+    }
+  }
+
+  function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === "password" ? "text" : "password";
+  }
+
+  districtSelect.addEventListener("change", populateCities);
+  citySelect.addEventListener("change", populateSchools);
+  schoolSelect.addEventListener("change", () => {
+    if (schoolSelect.value === "__manual") setManualMode(true);
+  });
+  manualToggle.addEventListener("change", event => setManualMode(event.target.checked));
+
+  document.querySelectorAll("[data-toggle-password]").forEach(button => {
+    button.addEventListener("click", () => togglePassword(button.dataset.togglePassword));
+  });
+
+  adminForm.addEventListener("submit", event => {
+    event.preventDefault();
+    adminName.required = true;
+    adminEmail.required = true;
+    adminPassword.required = true;
+    confirmPassword.required = true;
+    districtSelect.required = true;
+    citySelect.required = true;
+    schoolSelect.required = !manualToggle.checked;
+
+    if (!adminForm.checkValidity()) {
+      adminForm.reportValidity();
+      return;
+    }
+
+    if (adminPassword.value !== confirmPassword.value) {
+      confirmPassword.setCustomValidity("Passwords do not match");
+      confirmPassword.reportValidity();
+      confirmPassword.setCustomValidity("");
+      return;
+    }
+
+    const school = manualToggle.checked ? manualSchool.value.trim() : schoolSelect.value;
+    const city = manualToggle.checked ? manualCity.value.trim() : citySelect.value;
+    adminResult.textContent = `Admin registration request received for ${adminName.value.trim()} (${adminEmail.value.trim()}) at ${school}, ${city}.`;
+    adminResult.classList.add("show");
+    window.location.href = "school_dashboard.html";
+  });
+
+  populateDistricts();
+  if (window.lucide) window.lucide.createIcons();
+</script>
+</body>
+</html>
 
